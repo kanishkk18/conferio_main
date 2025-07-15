@@ -89,7 +89,8 @@ const Meetings = () => {
             </div>
             </div>
 
-<ChartCard/>
+<ChartCard 
+/>
               <div className="flex w-[22%] flex-col gap-4">
                 <div className=" h-full ">
                   <div className="px-4 py-2 flex bg-red-500 justify-between rounded-xl h-full flex-col">
