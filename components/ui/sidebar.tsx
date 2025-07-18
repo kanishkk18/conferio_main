@@ -152,8 +152,8 @@ function SidebarProvider({
 }
 
 function Sidebar({
-  side = "left",
-  variant = "sidebar",
+  side = "right",
+  variant = "floating",
   collapsible = "offcanvas",
   className,
   children,
@@ -266,7 +266,7 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-7", className)}
+      className={cn("size-6", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
