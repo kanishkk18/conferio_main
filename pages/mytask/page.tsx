@@ -1269,7 +1269,7 @@ function MyTask() {
                       <Plus />
                     </Button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className=" ml-7">
                     <TaskForm />
                   </DialogContent>
                 </Dialog>
@@ -1297,7 +1297,7 @@ function MyTask() {
                       <Plus />
                     </Button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className="ml-7">
                     <TaskForm />
                   </DialogContent>
                 </Dialog>
