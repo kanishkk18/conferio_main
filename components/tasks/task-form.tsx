@@ -208,16 +208,15 @@ export function TaskForm() {
           
           </Card>
           <Card className="">
-            <CardContent className=" flex flex-col justify-center items-start">
+            <CardContent className="flex flex-col justify-center items-start ">
                <Button
                 onClick={handleNewTask}
                 disabled={!isFormValid}
                 className={`font-semibold ${
                   isFormValid
-                    ? "bg-ItsDone text-black hover:text-white"
+                    ? "bg-ItsDone mt-5 text-black hover:text-white"
                     : "bg-gray-400 mt-5 text-gray-700 cursor-not-allowed"
-                }`}
-              >
+                }`}>
                 Save Task
               </Button>
             </CardContent>
