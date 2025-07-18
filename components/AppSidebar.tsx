@@ -1,123 +1,114 @@
-// import {
-//   CalendarRange,
-//   ClockIcon,
-//   Command,
-//   LayoutGrid,
-//   LinkIcon,
-//   LucideIcon,
-// } from "lucide-react";
-// import {
-//   Sidebar,
-//   SidebarContent,
-//   SidebarHeader,
-//   SidebarMenu,
-//   SidebarMenuItem,
-//   SidebarMenuButton,
-//   SidebarTrigger,
-//   SidebarRail,
-//   useSidebar,
-// } from "./ui/sidebar";
-// //import { Separator } from "./ui/separator";
-// import { Link, useLocation } from "react-router-dom";
-// import { PROTECTED_ROUTES } from "routes/common/routePaths";
+"use client"
 
-// type ItemType = {
-//   title: string;
-//   url: string;
-//   icon: LucideIcon;
-//   separator?: boolean;
-// };
+import {useState, useEffect } from "react";
+import {CategoryForm} from "./categories/category-form";
 
-// export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-//   const location = useLocation();
-//   const { state } = useSidebar();
+import Categories from "@/components/categories/categories";
+import { DatePicker } from "@/components/date-picker";
+// import { NavUser } from "@/components/nav-user";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarRail,
+  SidebarSeparator,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import Category from "interfaces/category";
+import Loading from "./common/loading";
 
-//   const pathname = location.pathname;
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [user] = useState();
 
-//   const items: ItemType[] = [
-//     {
-//       title: "Event types",
-//       url: PROTECTED_ROUTES.EVENT_TYPES,
-//       icon: LinkIcon,
-//     },
-//     {
-//       title: "Meetings",
-//       url: PROTECTED_ROUTES.MEETINGS,
-//       icon: CalendarRange,
-//     },
-//     {
-//       title: "Integrations & apps",
-//       url: PROTECTED_ROUTES.INTEGRATIONS,
-//       icon: LayoutGrid,
-//       separator: true,
-//     },
+  const [categories, setCategories] = useState<Category[]>([]);
 
-//     {
-//       title: "Availability",
-//       url: PROTECTED_ROUTES.AVAILBILITIY,
-//       icon: ClockIcon,
-//     },
-//   ];
+  const [isLoading, setIsLoading] = useState(true);
 
-//   return (
-//     <Sidebar
-//       collapsible="icon"
-//       variant="sidebar"
-//       className={`${
-//         state !== "collapsed" ? "w-[260px]" : ""
-//       } !bg-white !border-[#D4E162]`}
-//       {...props}
-//     >
-//       <SidebarHeader
-//         className={`!py-2 relative ${
-//           state !== "collapsed" ? "!px-5" : "!px-3"
-//         }`}
-//       >
-//         <div className="flex h-[50px] items-center gap-1 justify-start ">
-//           <div
-//             className="flex aspect-square size-6 items-center 
-//           justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
-//           >
-//             <Command className="size-4" />
-//           </div>
-//           {state !== "collapsed" && (
-//             <div className="grid flex-1 text-left text-2xl leading-tight ml-px">
-//               <h2 className="truncate font-medium">Meetly</h2>
-//             </div>
-//           )}
+  useEffect(() => {
+    // const fetchUser = async () => {
+    //   setIsLoading(true);
+    //   try {
+    //     const response = await fetch("/api/auth/session", {
+    //       method: "GET",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     });
 
-//           <SidebarTrigger
-//             className={`-ml-1 cursor-pointer ${
-//               state === "collapsed" &&
-//               "absolute -right-5 z-20 rounded-full bg-white border transform rotate-180"
-//             }`}
-//           />
-//         </div>
-//       </SidebarHeader>
-//       <SidebarContent className="!p-[4px_8px] dark:bg-background">
-//         <SidebarMenu>
-//           {items.map((item) => (
-//             <SidebarMenuItem key={item.title}>
-//               <SidebarMenuButton
-//                 className="hover:!bg-[#e5efff] data-[active=true]:!bg-[#e5efff]"
-//                 isActive={item.url === pathname}
-//                 asChild
-//               >
-//                 <Link
-//                   to={item.url}
-//                   className="!text-[16px] !p-[12px_8px_12px_16px] min-h-[48px] rounded-[8px]
-//                   !font-semibold
-//                   "
-//                 >
-//                   <item.icon className="!w-5 !h-5 !stroke-2" />
-//                   <span>{item.title}</span>
-//                 </Link>
-//               </SidebarMenuButton>
-//             </SidebarMenuItem>
-//           ))}
-//         </SidebarMenu>
-//       </SidebarContent>
-//       <SidebarRail />
-//     </Sidebar>
-//   );
-// }
+    //     if (!response.ok) {
+    //       throw new Error("Failed to fetch user data");
+    //     }
+
+    //     const data = await response.json();
+
+    //     setUser(data);
+    //   } catch (error) {
+    //     console.error("Error fetching user session:", error);
+    //   }
+    //   setIsLoading(false);
+    // };
+
+    const fetchCategory = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/category", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          console.error("Error fetching category");
+        }
+
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching category", error);
+      }
+      setIsLoading(false);
+    };
+
+    // fetchUser();
+    fetchCategory();
+  }, []);
+
+  const data = {
+    user,
+    categories,
+  };
+
+  return (
+    <div className="z-50">
+      <Loading isLoading={isLoading} />
+
+      <Sidebar {...props} className="dark">
+
+        <SidebarContent className="z-50 dark">
+          <SidebarTrigger className=" bottom-5 -left-1 z-50 bg-blue-600 absolute text-white" />
+
+          <DatePicker />
+          <SidebarSeparator className="mx-0" />
+          <Categories
+            isLoading={isLoading}
+            categories={data.categories!}
+            setCategories={setCategories}
+          />
+        </SidebarContent>
+
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem className=" flex items-center justify-center">
+              <CategoryForm setCategories={setCategories} />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+
+        <SidebarRail />
+      </Sidebar>
+    </div>
+  );
+}
