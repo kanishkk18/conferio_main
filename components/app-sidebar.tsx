@@ -88,7 +88,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <Sidebar {...props} className="dark">
 
         <SidebarContent className="z-50 dark">
-          <SidebarTrigger className=" bottom-3 -right-1 z-50 bg-blue-600 absolute text-white" />
+          <SidebarTrigger className=" bottom-5 -left-1 z-50 bg-blue-600 absolute text-white" />
 
           <DatePicker />
           <SidebarSeparator className="mx-0" />
@@ -101,7 +101,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
         <SidebarFooter>
           <SidebarMenu>
-            <SidebarMenuItem >
+            <SidebarMenuItem className="flex items-center justify-center">
               <CategoryForm setCategories={setCategories} />
             </SidebarMenuItem>
           </SidebarMenu>
