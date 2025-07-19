@@ -1,6 +1,7 @@
 import { getSession, GetSessionParams } from 'next-auth/react';
 // import Head from 'next/head';
 import { useEffect } from 'react';
+import React, { FC } from 'react';
 import { mutate } from 'swr';
 import Board from '@/components/Board/Board';
 import Layout from '@/components/Layout/Layout';
@@ -9,7 +10,7 @@ import Spinner from '@/components/Spinner/Spinner';
 import useModal from 'hooks/useModal';
 import { useBoardsContext } from 'store/BoardListContext';
 import Header from '@/components/Layout/Header/Header';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import SideBar from '@/components/ui/mainSideBar';
 import { Calendar1, Clock, EditIcon } from 'lucide-react';
 import { MdEmail } from 'react-icons/md';
@@ -19,6 +20,10 @@ import UserAvatar from "@/components/ui/comp-377";
 import BoardNotify from '@/components/board-notification/index'
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import BoardList from '@/components/BoardList/BoardList';
+import Link from 'next/link';
+import Image from 'next/image';
+// import type { Board } from 'types';
+
 
 // interface CircularProgressProps {
 //   percentage: number;
@@ -28,14 +33,43 @@ import BoardList from '@/components/BoardList/BoardList';
 //   progressColor?: string;
 // }
 
+const BoardLink: FC<{ board }> = ({ board }) => {
+  // const isActive = router.query.boardId === board.uuid;
+const imageUrl = `https://picsum.photos/seed/${board.uuid}/400/200`;
+
+
+  return (
+     <Link
+      href={`/board/${board.uuid}`} className="">
+        <Card>
+          <CardContent className="h-52 w-64 p-0 overflow-hidden border-none shadow-md rounded-lg">
+      <div className="relative h-36 w-full">
+        <Image
+          src={imageUrl}
+          alt="Nature"
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          priority
+        />
+      </div>
+      <div className="dark:bg-[#1e1e1f] bg-[#f9f9fa] overflow-hidden text-start h-full p-2 dark:text-white text-ellipsis whitespace-nowrap capitalize text-base font-normal">
+        {board.name}
+      </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+};
+
 
 export default function BoardPage({
   size = 130,
   strokeWidth = 5,
   circleColor = "#fff000",
-  progressColor = "#4CD964"
+  progressColor = "#4CD964",
+  handleBoardSelect,
 }) {
-  const { selectedBoard, selectedTask, setSelectedTask, isLoading, isValidating } = useBoardsContext();
+  const { selectedBoard, selectedTask, setSelectedTask, isLoading, boards, isValidating } = useBoardsContext();
   const taskDetailsModal = useModal();
   const Modal = taskDetailsModal.Component;
 
@@ -61,6 +95,10 @@ export default function BoardPage({
       mutate(`/api/boards/${selectedBoard.uuid}`);
     }
   }, [taskDetailsModal.isOpen]);
+
+  const boardSelectHandler = () => {
+    handleBoardSelect && handleBoardSelect();
+  };
 
   return (
     <div className='flex '>
@@ -90,7 +128,7 @@ export default function BoardPage({
             </div>
           </div>
           <div className="flex ">
-            <main className="text-semibold bg-white/30 z-50 dark:bg-black/50 min-w-[60%] w-full max-w-[74vw] box-shadow dark:shadow-none rounded-2xl m-4 max-h-[88vh] thin-scrollbar overflow-scroll px-4 py-4 text-center font-jakarta text-lg text-mid-grey">
+            <main className="text-semibold bg-white/30 z-50 dark:bg-black/50 min-w-[60%] w-full max-w-[74vw] box-shadow dark:shadow-none rounded-2xl m-4 min-h-[88vh] max-h-[89vh] thin-scrollbar overflow-scroll px-4 py-4 text-center font-jakarta text-lg text-mid-grey">
 
               <Header />
               {selectedBoard ? (
@@ -101,13 +139,13 @@ export default function BoardPage({
                   {isLoading || isValidating ? (
                     <Spinner />
                   ) : (
-                    <div>
-                      <h2 className="mb-4 text-3xl font-bold">Board not found</h2>
-                      <p>
-                        This board does not exist or is not available to you. <br />
-                        Please select another board
-                      </p>
-                    </div>
+                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-4">
+  {boards?.map((board) => (
+    <div key={board.uuid} onClick={boardSelectHandler}>
+      <BoardLink board={board} />
+    </div>
+  ))}
+</div>
                   )}
                 </div>
               )}
@@ -122,7 +160,7 @@ export default function BoardPage({
              </Modal>
             </main>
             <div className="">
-              <Card className=" w-72 p-4 mt-4 max-h-fit mx-2 dark:border rounded-2xl box-shadow dark:shadow-none">
+              <Card className=" w-72 p-4 mt-4 max-h-full mx-2 dark:border rounded-2xl box-shadow dark:shadow-none">
                 <div className="mb-4">
                   <div className="flex justify-between items-center mb-2 bg-muted/90 p-4 rounded-2xl">
                     <h3 className="font-semibold capitalize ">{selectedBoard?.name}</h3>
@@ -188,7 +226,7 @@ export default function BoardPage({
                   </div>
                 </div>
               </Card>
-              <Card className='p-4 mt-4 max-h-fit space-y-4 mx-2 border-none rounded-2xl box-shadow dark:shadow-none'>
+              <Card className='p-4 mt-4 max-h-full space-y-4 mx-2 border-none rounded-2xl box-shadow dark:shadow-none'>
                 <div className="flex gap-3 justify-start items-center">
                   <Clock className='text-white p-2 h-9 w-9 bg-purple-400 rounded-sm' />
                   <div className="mr-10">
