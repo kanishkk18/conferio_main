@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@boxyhq/metrics": "0.2.10",
-    "@boxyhq/react-ui": "3.4.1",
+    "@boxyhq/react-ui": "3.5.1",
     "@boxyhq/saml-jackson": "1.45.1",
     "@calcom/embed-react": "^1.5.3",
     "@clerk/nextjs": "^6.23.1",
