@@ -32,7 +32,7 @@ const Header: FC = () => {
         });
         mutateBoards();
         deleteBoardModal.close();
-        await router.push('/');
+        await router.reload();
     };
     const deleteBoardModal = useModal({
         type: 'danger',
